@@ -9,11 +9,16 @@ from sklearn.model_selection import train_test_split
 
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformationConfig
+from src.components.data_transformation import DataTransformation
+
+# ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+
 @dataclass
 class DataIngestionConfig:
-  train_data_path:str=os.path.join('artifacts',"train.csv")
-  test_data_path:str=os.path.join('artifacts',"test.csv")
-  raw_data_path:str=os.path.join('artifacts',"data.csv")
+    train_data_path: str = os.path.join("artifacts", "train.csv")
+    test_data_path: str = os.path.join("artifacts", "test.csv")
+    raw_data_path: str  = os.path.join("artifacts", "data.csv")
 
 
 class DataIngestion:
@@ -24,6 +29,8 @@ class DataIngestion:
   def initiate_data_ingestion(self):
      logging.info("Enter the data ingestion method")
      try:
+       
+
         df = pd.read_csv(os.path.join("notebook", "data", "stud.csv"))
         logging.info('exported the dataset')
         os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
@@ -46,4 +53,7 @@ class DataIngestion:
 
 if __name__=="__main__":
    obj=DataIngestion()
-   obj.initiate_data_ingestion()
+   train_data,test_data=obj.initiate_data_ingestion()
+
+   data_transformation=DataTransformation()
+   data_transformation.initiate_data_transformation(train_data,test_data)
